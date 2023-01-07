@@ -1,5 +1,8 @@
 Revision history for Perl extension Passwd::Unix.
 
+1.05  Sat, 07 Jan 2023 19:15:21 +0100
+	- Support for deletion many groups/users at one time.
+
 1.04  Sat, 07 Jan 2023 17:27:35 +0100
 	- Update of README.
 

@@ -25,7 +25,7 @@ use constant GRP => q[/etc/group];
 use constant PSH => q[/etc/shadow];
 use constant GSH => q[/etc/gshadow];
 #=======================================================================
-our $VERSION 	= '1.04';
+our $VERSION 	= '1.05';
 our @EXPORT_OK	= qw(
 	
 	backup
@@ -163,10 +163,10 @@ sub del_group {
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	my $self = scalar @_ && ref $_[0] eq __PACKAGE__ ? shift : $Self;
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	my ( $val ) = @_;
+	my ( @val ) = @_;
 	
-	return $self->_err( q[Supplied value is undefined.] 	) unless defined $val;
-	return $self->_err( q[Supplied group does not exists.] 	) unless _exs( $self->{ grp }, $val );
+	return $self->_err( q[Supplied value is undefined.] 	) unless @val;
+	#return $self->_err( q[Supplied group does not exists.] 	) unless _exs( $self->{ grp }, $val );
 	return $self->_err( q[Unsufficient permissions.] 		) unless open my $fhd, '>>', $self->{ gsh };
 	
 	close( $fhd );
@@ -198,21 +198,23 @@ sub del_group {
 		},
 	};
 	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -	
-	my $sav;
-	for my $idx ( 0 .. $#ary ){
-		next if $ary[ $idx ][ 0 ] ne $val;
-		splice @ary, $idx, 1;
-		$sav = $idx;
-		last;
-	}
-	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	if( $yra[ $sav ][ 0 ] eq $val ){
-		splice @yra, $sav, 1;
-	}else{
-		for my $idx ( 0 .. $#yra ){
-			next if $yra[ $idx ][ 0 ] ne $val;
-			splice @yra, $idx, 1;
+	for my $val ( @val ){
+		my $sav;
+		for my $idx ( 0 .. $#ary ){
+			next if $ary[ $idx ][ 0 ] ne $val;
+			splice @ary, $idx, 1;
+			$sav = $idx;
 			last;
+		}
+		#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		if( $yra[ $sav ][ 0 ] eq $val ){
+			splice @yra, $sav, 1;
+		}else{
+			for my $idx ( 0 .. $#yra ){
+				next if $yra[ $idx ][ 0 ] ne $val;
+				splice @yra, $idx, 1;
+				last;
+			}
 		}
 	}
 	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -226,10 +228,10 @@ sub del {
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	my $self = scalar @_ && ref $_[0] eq __PACKAGE__ ? shift : $Self;
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	my ( $val ) = @_;
+	my ( @val ) = @_;
 	
-	return $self->_err( q[Supplied value is undefined.] 	) unless defined $val;
-	return $self->_err( q[Supplied user does not exists.] 	) unless _exs( $self->{ pwd }, $val );
+	return $self->_err( q[Supplied value is undefined.] 	) unless @val;
+	#return $self->_err( q[Supplied user does not exists.] 	) unless _exs( $self->{ pwd }, $val );
 	return $self->_err( q[Unsufficient permissions.] 		) unless open my $fhd, '>>', $self->{ psh };
 	
 	close( $fhd );
@@ -261,22 +263,24 @@ sub del {
 		},
 	};
 	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -	
-	my $usr;
-	my $sav;
-	for my $idx ( 0 .. $#ary ){
-		next if $ary[ $idx ][ 0 ] ne $val;
-		$usr = splice @ary, $idx, 1;
-		$sav = $idx;
-		last;
-	}
-	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	if( $yra[ $sav ][ 0 ] eq $val ){
-		splice @yra, $sav, 1;
-	}else{
-		for my $idx ( 0 .. $#yra ){
-			next if $yra[ $idx ][ 0 ] ne $val;
-			splice @yra, $idx, 1;
+	for my $val ( @val ){
+		my $usr;
+		my $sav;
+		for my $idx ( 0 .. $#ary ){
+			next if $ary[ $idx ][ 0 ] ne $val;
+			$usr = splice @ary, $idx, 1;
+			$sav = $idx;
 			last;
+		}
+		#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		if( $yra[ $sav ][ 0 ] eq $val ){
+			splice @yra, $sav, 1;
+		}else{
+			for my $idx ( 0 .. $#yra ){
+				next if $yra[ $idx ][ 0 ] ne $val;
+				splice @yra, $idx, 1;
+				last;
+			}
 		}
 	}
 	#+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
@@ -309,16 +313,18 @@ sub del {
 		},
 	};
 	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	for my $idx ( 0 .. $#ary ){
-		next if $ary[ $idx ][ 3 ] !~ /\b$val\b/;
-		$ary[ $idx ][ 3 ] = join( q[,], grep { $_ ne $val } split( /\s*,\s*/, $ary[ $idx ][ 3 ] ) );
+	for my $val ( @val ){
+		my $sav;
+		for my $idx ( 0 .. $#ary ){
+			next if $ary[ $idx ][ 3 ] !~ /\b$val\b/;
+			$ary[ $idx ][ 3 ] = join( q[,], grep { $_ ne $val } split( /\s*,\s*/, $ary[ $idx ][ 3 ] ) );
+		}
+		#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		for my $idx ( 0 .. $#yra ){
+			next if $ary[ $idx ][ 3 ] !~ /\b$val\b/;
+			$ary[ $sav ][ 3 ] = join( q[,], grep { $_ ne $val } split( /\s*,\s*/, $ary[ $sav ][ 3 ] ) );
+		}
 	}
-	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	for my $idx ( 0 .. $#yra ){
-		next if $ary[ $idx ][ 3 ] !~ /\b$val\b/;
-		$ary[ $sav ][ 3 ] = join( q[,], grep { $_ ne $val } split( /\s*,\s*/, $ary[ $sav ][ 3 ] ) );
-	}
-
 	#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	return 1;
 }
