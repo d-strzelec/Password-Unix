@@ -25,7 +25,7 @@ use constant GRP => q[/etc/group];
 use constant PSH => q[/etc/shadow];
 use constant GSH => q[/etc/gshadow];
 #=======================================================================
-our $VERSION 	= '1.01';
+our $VERSION 	= '1.04';
 our @EXPORT_OK	= qw(
 	
 	backup

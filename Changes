@@ -1,5 +1,17 @@
 Revision history for Perl extension Passwd::Unix.
 
+1.04  Sat, 07 Jan 2023 17:27:35 +0100
+	- Update of README.
+
+1.03  Sat, 07 Jan 2023 17:21:53 +0100
+	- Fix version number.
+
+1.02  Sat, 07 Jan 2023 17:21:53 +0100
+	- Update of Makefile.pl.
+
+1.01  Fri, 06 Jan 2023 14:20:00 +0100
+	- Update of "Changes" file.
+
 1.0   Fri, 06 Jan 2023 14:19:16 +0100
 	- Full refactorisation of code.
 
