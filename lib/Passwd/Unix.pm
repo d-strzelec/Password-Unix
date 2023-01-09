@@ -25,7 +25,6 @@ use constant GRP => q[/etc/group];
 use constant PSH => q[/etc/shadow];
 use constant GSH => q[/etc/gshadow];
 #=======================================================================
-our $VERSION 	= '1.05';
 our @EXPORT_OK	= qw(
 	
 	backup
@@ -849,13 +848,12 @@ sub algorithm {
 	my ( $val ) = @_;
 	
 	return $self->{ alg } unless defined $val;
-	
-	return unless 	$val eq q[sha512] 	or
-					$val eq q[md5] 		or
-					$val eq q[blowfish] or
-					$val eq q[sha256] 	;
-	
-	$self->{ alg } = $val ? 1 : 0;
+
+	my $alg =	$val eq q[md5] 		? $val :
+				$val eq q[blowfish] ? $val :
+				$val eq q[sha256] 	? $val : q[sha512];
+					
+	$self->{ alg } = $alg;
 	
 	return $self->{ alg };
 }
