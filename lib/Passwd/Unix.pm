@@ -943,7 +943,7 @@ sub passwd_file {
 	my $pth = path( $val );
 	die q[Password file cannot be a directory.] if $pth->is_dir;
 	
-	$pth->touchpath unless $pth->exists;
+	#$pth->touchpath unless $pth->exists;
 	
 	$self->{ pwd } = $pth->absolute->canonpath;
 	
@@ -961,7 +961,7 @@ sub group_file {
 	my $pth = path( $val );
 	die q[Group file cannot be a directory.] if $pth->is_dir;
 	
-	$pth->touchpath unless $pth->exists;
+	#$pth->touchpath unless $pth->exists;
 	
 	$self->{ grp } = $pth->absolute->canonpath;
 	
@@ -979,7 +979,7 @@ sub shadow_file {
 	my $pth = path( $val );
 	die q[Shadowed passwd file (aka "shadow") file cannot be a directory.] if $pth->is_dir;
 	
-	$pth->touchpath unless $pth->exists;
+	#$pth->touchpath unless $pth->exists;
 	
 	$self->{ psh } = $pth->absolute->canonpath;
 	
@@ -997,7 +997,7 @@ sub gshadow_file {
 	my $pth = path( $val );
 	die q[Shadowed group file (aka "gshadow") file cannot be a directory.] if $pth->is_dir;
 	
-	$pth->touchpath unless $pth->exists;
+	#$pth->touchpath unless $pth->exists;
 	
 	$self->{ gsh } = $pth->absolute->canonpath;
 	

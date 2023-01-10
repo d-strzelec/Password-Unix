@@ -1,5 +1,8 @@
 Revision history for Perl extension Passwd::Unix.
 
+1.09  Tue, 10 Jan 2023 09:16:15 +0100
+	- Fixed file creation issue (during use of package). We should not create files - this is on the user site.
+
 1.08  Mon, 09 Jan 2023 07:12:02 +0100
 	- Removed "test.pl" file. From now on there sould be used real tests.
 
